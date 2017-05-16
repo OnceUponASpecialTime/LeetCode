@@ -157,4 +157,63 @@ public class Solution1 {
             }
         }
     }
+
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> list = new ArrayList<>();
+        Arrays.sort(nums);
+        backtrack(list, new ArrayList<>(), nums, 0);
+        return list;
+    }
+
+    private void backtrack(List<List<Integer>> list, List<Integer> tempList, int[] nums, int start) {
+        list.add(new ArrayList<>(tempList));
+        for (int i = start; i < nums.length; i++) {
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, i+1);
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int i = m - 1, j = n - 1, k = m + n - 1;
+        while (i > -1 && j > -1) nums1[k--] = (nums1[i] > nums2[j]) ? nums1[i--] : nums2[j--];
+        while (j > -1) nums1[k--] = nums2[j--];
+    }
+
+    public class ListNode {
+        int val;
+        ListNode next;
+        ListNode (int x) { val = x ;}
+    }
+
+    public ListNode deleteDuplicates (ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+        head.next = deleteDuplicates(head.next);
+        return head.val == head.next.val ? head.next : head;
+    }
+
+    public int findUnsortedSubarray (int[] nums) {
+        int n = nums.length;
+        int[] temp = new int[n];
+
+        int start = 0;
+        while (start < n && nums[start] == temp[start]) start++;
+
+        int end = 0;
+        while (end > start && nums[end] == temp[end]) end--;
+
+        return end - start + 1;
+
+    }
+
+    public int[][] matrixReshape(int[][] nums, int r, int c) {
+        int m = nums.length, n = nums[0].length;
+        if (r * c != m * n) return nums;
+        int[][] res = new int[r][c];
+        for (int i = 0; i < r * c; i++) {
+            res[i/c][i%c] = nums[i/m][i%m];
+        }
+        return res;
+    }
 }
