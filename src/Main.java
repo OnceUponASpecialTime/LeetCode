@@ -4,137 +4,105 @@ import java.util.*;
  * Created by Foutas on 2017/4/11.
  */
 public class Main {
-//    public static void main(String[] args) {
-//        Scanner sc = new Scanner(System.in);
-//        Main m = new Main();
-//        while (sc.hasNextInt()) {
-//         //   int n = sc.nextInt();
-//            int n = 15;
-//            System.out.println(m.Fenjie(n));
-//        }
-//    }
-//public static void main(String[] args) {
-//    Scanner sc = new Scanner(System.in);
-//    String line1 = sc.nextLine();
-//    String line2 = sc.nextLine();
-//    if (line1 != null && !line1.isEmpty() && line2 != null && !line2.isEmpty()) {
-//        int res = Match(line1.trim(), line2.trim());
-//        System.out.printf(String.valueOf(res));
-//    }
-//}
-//
-//    private static int Match(String s1, String s2) {
-//        int res = 0;
-//        char[] c1 = s1.toCharArray();
-//        char[] c2 = s2.toCharArray();
-//
-//        return 0;
-//    }
-//
-//    private int Fenjie(int n) {
-//        int m = 1;
-//        while (n >= 0 && n <= 50) {
-//            if (n == 0 || n == 1 || n == 2 || n == 3|| n == 4) {
-//                m = n;
-//            }  else {
-//                while ((n - 3) >= 4) {
-//                    n = n - 3;
-//                    m = m*3;
-//                }
-//                if (n == 6) {
-//                    m = m*3*3;
-//                } else if(n == 5) {
-//                    m = m*3*2;
-//                } else if(n == 4) {
-//                    m = m*2*2;
-//                }
-//            }
-//        }
-//        return m;
-//    }
-//
-//    public static int resolve(String expr) {
-//        String s = expr.split(" ").toString();
-//        int res = 0;
-//        Stack<Character> stack = new Stack<Character>();
-//        if (stack.isEmpty()){
-//            res = -1;
-//        }
-//        if (stack.size() > 16) {
-//            res = -2;
-//        }
-//        for(char c : s.toCharArray()) {
-//            if (c == '+') {
-//                char x = stack.pop();
-//                char y = stack.pop();
-//                res = x + y;
-//                stack.push((char)res);
-//            }
-//            else if (c == '*') {
-//                char x = stack.pop();
-//                char y = stack.pop();
-//                res = x * y;
-//                stack.push((char)res);
-//            }
-//            else if (c == '^') {
-//                char x = stack.pop();
-//                res = x * x + 1;
-//                stack.push((char)res);
-//            }
-//            else {
-//                stack.push(c);
-//            }
-//        }
-//        return res;
-//    }
-//
-//    public static void main(String[] args) {
-//        Scanner sc = new Scanner(System.in);
-//        Main m = new Main();
-//        int n = sc.nextInt();
-//        int[] a = new int[n];
-//        for (int i = 0; i < n; i++) {
-//            a[i] = sc.nextInt();
-//        }
-//        System.out.println(m.Price(a));
-//    }
 
-    private int Price(int[] a) {
-        int ans = 0;
-        Arrays.sort(a);
-        int[] b = null;
-        if (a.length < 3) {
-            ans = -1;
-        } else {
-            for (int i = 0; i < a.length - 1; i++) {
-                if (a[i] != a[i + 1]) {
-                    b[i] = a[i];
-                }
-                else
-                    b[i] = a[i + 1];
-            }
-            if (b.length < 3) {
-                ans = -1;
-            } else {
-                ans = b[2];
-            }
-        }
-        return ans;
-    }
+//    public static void main(String[] args) {
+//        int[] a = {2,4,6,5,7,3,8,9,10};
+//        int n = 0;
+//        n = findUnsortedSubarray(a);
+//        System.out.println(n);
+//    }
+//
+//    public static void main(String[] args) {
+//        int[] a = {3,5,7,4,6,9,1};
+//        System.out.println(findDisappearedNumbers(a));
+//    }
+//
+//    private static int findUnsortedSubarray(int[] A) {
+//        int n = A.length, beg = -1, end = -2, min = A[n-1], max = A[0];
+//        for (int i=1;i<n;i++) {
+//            max = Math.max(max, A[i]);
+//            min = Math.min(min, A[n-1-i]);
+//            if (A[i] < max) end = i;
+//            if (A[n-1-i] > min) beg = n-1-i;
+//        }
+//        return end - beg + 1;
+//
+//    }
+//
+//    private static List<Integer> findDisappearedNumbers(int[] nums) {
+//        List<Integer> ret = new ArrayList<Integer>();
+//
+//        for(int i = 0; i < nums.length; i++) {
+//            int val = Math.abs(nums[i]) - 1;
+//            if(nums[val] > 0) {
+//                nums[val] = -nums[val];
+//            }
+//        }
+//
+//        for(int i = 0; i < nums.length; i++) {
+//            if(nums[i] > 0) {
+//                ret.add(i+1);
+//            }
+//        }
+//        return ret;
+//    }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        Main m = new Main();
-        while (sc.hasNextInt()) {
-            int n = sc.nextInt();
-            int k = sc.nextInt();
-            System.out.println(m.Inlaw(n, k));
-        }
+        int[] nums = {3,1,6,9,12};
+        int k = 4;
+        boolean ans = containsNearbyDuplicate(nums, k);
+//        int ans = missingNumber(nums);
+        System.out.println(ans);
     }
 
-    private int Inlaw(int n, int k) {
-        int res = 0;
+    private static int thridMax(int[] nums) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        Set<Integer> set = new HashSet<>();
+        for (int i : nums) {
+            if (!set.contains(i)) {
+                pq.offer(i);
+                set.add(i);
+                if (pq.size() > 3) {
+                    set.remove(pq.poll());
+                }
+            }
+        }
+        if (pq.size() < 3) {
+            while (pq.size() > 1) {
+                pq.poll();
+            }
+        }
+        return pq.peek();
+    }
 
-        return 0;
+//    private static int missingNumber(int[] nums) { //binary search
+//        Arrays.sort(nums);
+//        int left = 0, right = nums.length, mid= (left + right)/2;
+//        while(left<right){
+//            mid = (left + right)/2;
+//            if(nums[mid]>mid) right = mid;
+//            else left = mid+1;
+//        }
+//        return left;
+//    }
+
+    private static int missingNumber(int[] nums) { //xor
+        int res = nums.length;
+        for(int i=0; i<nums.length; i++){
+            res ^= i;
+            res ^= nums[i];
+        }
+        return res;
+    }
+
+    private static boolean containsNearbyDuplicate(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(nums[i])) {
+                if (i - map.get(nums[i]) <= k)
+                    return true;
+            }
+        }
+        return false;
     }
 }

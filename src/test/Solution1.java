@@ -236,4 +236,82 @@ public class Solution1 {
         if (s.val != t.val) return false;
         return isSame(s.left, t.left) && isSame(s.right, t.right);
     }
+
+    public int findPairs(int[] nums, int k) {
+        if (k < 0) {
+            return 0;
+        }
+        Set<Integer> starters = new HashSet<Integer>();
+        Set<Integer> uniqs = new HashSet<Integer>();
+
+        for (int i = 0; i < nums.length; i++) {
+            if (uniqs.contains(nums[i] - k))
+                starters.add(nums[i] - k);
+            if (uniqs.contains(nums[i] + k))
+                starters.add(nums[i] + k);
+            uniqs.add(nums[i]);
+        }
+        return starters.size();
+    }
+
+    public int findMaxConsecutiveOnes(int[] nums) {
+        int max = 0, maxHere = 0;
+        for (int n : nums)
+            max = Math.max(max, maxHere = n == 0 ? 0 : maxHere + 1);
+        return max;
+    }
+
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> list = new ArrayList<>();
+        int m = 0, n = 0;
+        Arrays.sort(nums);
+        if (nums.length == 0) list = null;
+        while (m < nums.length - 1) {
+            if (nums[m] == nums[m + 1] || nums[m] == nums[m + 1] - 1) {
+                m++;
+            } else {
+                n = nums[m + 1] - nums[m];
+                for (int i = 1; i < n; i++) {
+                    list.add(nums[m] + i);
+                }
+            }
+
+        }
+        return list;
+    }
+
+    public int thridMax(int[] nums) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        Set<Integer> set = new HashSet<>();
+        for (int i : nums) {
+            if (!set.contains(i)) {
+                pq.offer(i);
+                set.add(i);
+                if (pq.size() > 3) {
+                    set.remove(pq.poll());
+                }
+            }
+        }
+        if (pq.size() < 3) {
+            while (pq.size() > 1) {
+                pq.poll();
+            }
+        }
+        return pq.peek();
+    }
+
+    public void moveZeroes (int[] nums) {
+        if (nums.length == 0 || nums == null) return;
+        int postnum = 0;
+        for (int num : nums) {
+            if (num != 0) nums[postnum] = num;
+        }
+        while (postnum < nums.length) {
+            nums[postnum++] = 0;
+        }
+    }
+
+//    public int missingNumber (int[] nums) {
+//
+//    }
 }
