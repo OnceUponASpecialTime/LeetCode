@@ -1,108 +1,86 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
-/**
- * Created by Foutas on 2017/4/11.
- */
 public class Main {
 
-//    public static void main(String[] args) {
-//        int[] a = {2,4,6,5,7,3,8,9,10};
-//        int n = 0;
-//        n = findUnsortedSubarray(a);
-//        System.out.println(n);
-//    }
-//
-//    public static void main(String[] args) {
-//        int[] a = {3,5,7,4,6,9,1};
-//        System.out.println(findDisappearedNumbers(a));
-//    }
-//
-//    private static int findUnsortedSubarray(int[] A) {
-//        int n = A.length, beg = -1, end = -2, min = A[n-1], max = A[0];
-//        for (int i=1;i<n;i++) {
-//            max = Math.max(max, A[i]);
-//            min = Math.min(min, A[n-1-i]);
-//            if (A[i] < max) end = i;
-//            if (A[n-1-i] > min) beg = n-1-i;
-//        }
-//        return end - beg + 1;
-//
-//    }
-//
-//    private static List<Integer> findDisappearedNumbers(int[] nums) {
-//        List<Integer> ret = new ArrayList<Integer>();
-//
-//        for(int i = 0; i < nums.length; i++) {
-//            int val = Math.abs(nums[i]) - 1;
-//            if(nums[val] > 0) {
-//                nums[val] = -nums[val];
-//            }
-//        }
-//
-//        for(int i = 0; i < nums.length; i++) {
-//            if(nums[i] > 0) {
-//                ret.add(i+1);
-//            }
-//        }
-//        return ret;
-//    }
-
     public static void main(String[] args) {
-        int[] nums = {3,1,6,9,12};
-        int k = 4;
-        boolean ans = containsNearbyDuplicate(nums, k);
-//        int ans = missingNumber(nums);
-        System.out.println(ans);
+
+        ArrayList<Integer> _ids = new ArrayList<Integer>();
+        ArrayList<Integer> _parents = new ArrayList<Integer>();
+        ArrayList<Integer> _costs = new ArrayList<Integer>();
+
+        Scanner in = new Scanner(System.in);
+        String line = in.nextLine();
+
+        while(line != null && !line.isEmpty()) {
+            if(line.trim().equals("0")) break;
+            String []values = line.trim().split(" ");
+            if(values.length != 3) {
+                break;
+            }
+            _ids.add(Integer.parseInt(values[0]));
+            _parents.add(Integer.parseInt(values[1]));
+            _costs.add(Integer.parseInt(values[2]));
+            line = in.nextLine();
+        }
+        int res = resolve(_ids, _parents, _costs);
+
+        System.out.println(String.valueOf(res));
     }
 
-    private static int thridMax(int[] nums) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-        Set<Integer> set = new HashSet<>();
-        for (int i : nums) {
-            if (!set.contains(i)) {
-                pq.offer(i);
-                set.add(i);
-                if (pq.size() > 3) {
-                    set.remove(pq.poll());
-                }
+    // write your code here
+    public static int resolve(ArrayList<Integer> ids, ArrayList<Integer> parents, ArrayList<Integer> costs) {
+        int max = 0;
+        Map<Integer, Integer> map1 = new HashMap<>();
+        for (int i = 0; i < ids.size(); i++) {
+            if (parents.get(i) == 0) {
+                map1.put(ids.get(i), costs.get(i));
+                max = Math.max(max, costs.get(i));
             }
         }
-        if (pq.size() < 3) {
-            while (pq.size() > 1) {
-                pq.poll();
+        for (int i = 0; i < ids.size(); i++) {
+            if (ids.contains(parents.get(i))) {
+                max = Math.max(max, map1.get(ids.get(parents.get(i))) + costs.get(i));
             }
         }
-        return pq.peek();
+        return max;
     }
 
-//    private static int missingNumber(int[] nums) { //binary search
-//        Arrays.sort(nums);
-//        int left = 0, right = nums.length, mid= (left + right)/2;
-//        while(left<right){
-//            mid = (left + right)/2;
-//            if(nums[mid]>mid) right = mid;
-//            else left = mid+1;
-//        }
-//        return left;
-//    }
+    public boolean isUniqueChars(String str) {
+        if (str.length() > 256) return false;
+        boolean[] char_set = new boolean[256];
 
-    private static int missingNumber(int[] nums) { //xor
-        int res = nums.length;
-        for(int i=0; i<nums.length; i++){
-            res ^= i;
-            res ^= nums[i];
+        for (int i = 0; i < str.length(); i++) {
+            int val = str.charAt(i);
+            if (char_set[val]) {
+                return false;
+            }
+            char_set[val] = true;
         }
-        return res;
+        return true;
     }
 
-    private static boolean containsNearbyDuplicate(int[] nums, int k) {
-        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-        for (int i = 0; i < nums.length; i++) {
-            if (map.containsKey(nums[i])) {
-                if (i - map.get(nums[i]) <= k)
-                    return true;
+    public boolean permutation(String s, String t) {
+        if (s.length() != t.length())
+            return false;
+
+        int[] letters = new int[256];
+
+        char[] s_array = s.toCharArray();
+        for (char c : s_array) {
+            letters[c]++;
+        }
+
+        for (int i = 0; i < t.length(); i++) {
+            int c = (int)t.charAt(i);
+            if (--letters[c] < 0) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
+
+
 }
